@@ -54,26 +54,107 @@ python3 dht11_realtime.py
 
 ## Troubleshooting
 
+### Issue: Script shows header but doesn't read data
+
+**Symptoms:**
+- Script displays "GPIO Pin: 4 (Physical Pin 7)" and "Press Ctrl+C to exit"
+- No temperature/humidity readings appear
+- Script seems to hang
+
+**Solutions:**
+
+#### Step 1: Run Diagnostic
+```bash
+python3 dht11_diagnostic.py
+```
+This will check your system and identify missing libraries or permission issues.
+
+#### Step 2: Check Library Installation
+```bash
+# Try installing with different methods:
+
+# Method 1 (Recommended):
+pip3 install adafruit-circuitpython-dht
+sudo apt-get install libgpiod2
+
+# Method 2 (If Method 1 fails):
+sudo pip3 install adafruit-circuitpython-dht
+
+# Method 3 (Legacy library):
+pip3 install Adafruit_DHT
+
+# Method 4 (Basic GPIO):
+pip3 install RPi.GPIO
+```
+
+#### Step 3: Permission Issues
+```bash
+# Try running with sudo permissions:
+sudo python3 dht11_realtime.py
+
+# Or use the enhanced version:
+sudo python3 dht11_enhanced.py
+```
+
+#### Step 4: Hardware Check
+1. **Verify Wiring:**
+   ```
+   DHT11 VCC  → Pi Pin 1 (3.3V) - RED wire
+   DHT11 GND  → Pi Pin 6 (Ground) - BLACK wire  
+   DHT11 DATA → Pi Pin 7 (GPIO4) - YELLOW/WHITE wire
+   ```
+
+2. **Check Power Supply:**
+   - Ensure stable 3.3V power
+   - Try using Pin 17 (5V) instead of Pin 1 (3.3V) for VCC
+
+3. **Test Different GPIO Pin:**
+   - Try GPIO17 (Pin 11) instead of GPIO4 (Pin 7)
+   - Modify the code: change `board.D4` to `board.D17`
+
+#### Step 5: Alternative Scripts
+If main script doesn't work, try these alternatives:
+
+```bash
+# Enhanced version with better error handling:
+python3 dht11_enhanced.py
+
+# Simple version using RPi.GPIO:
+python3 dht11_alternative.py
+```
+
 ### Common Issues:
 
-1. **Permission Error**
+1. **"Import board could not be resolved"**
+   ```bash
+   pip3 install adafruit-circuitpython-dht
+   sudo apt-get install libgpiod2
+   ```
+
+2. **"Permission denied" or "timeout" errors**
    ```bash
    sudo python3 dht11_realtime.py
    ```
 
-2. **Library Import Error**
-   - Try installing with sudo: `sudo pip3 install adafruit-circuitpython-dht`
-   - Or use virtual environment
+3. **"No module named 'board'"**
+   ```bash
+   # Install CircuitPython libraries:
+   pip3 install adafruit-blinka
+   pip3 install adafruit-circuitpython-dht
+   ```
 
-3. **Sensor Not Responding**
+4. **GPIO not accessible**
+   ```bash
+   sudo raspi-config
+   # Navigate to Interface Options → GPIO → Enable
+   sudo reboot
+   ```
+
+5. **Sensor returns None values**
    - Check wiring connections
-   - Ensure DHT11 is getting 3.3V power
-   - Try different GPIO pin (modify code accordingly)
-
-4. **Timeout Errors**
-   - Normal occasionally due to sensor timing
+   - Ensure sensor is genuine DHT11 (not DHT22)
+   - Try different GPIO pin
    - Check for loose connections
-   - Ensure stable power supply
 
 ### Alternative GPIO Pins:
 If GPIO4 doesn't work, you can try these pins (modify the code):
