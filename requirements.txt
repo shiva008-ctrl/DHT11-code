@@ -1,5 +1,10 @@
-# Install required packages for DHT11 sensor
+# DHT11 Sensor Requirements
+# Primary library (recommended)
 adafruit-circuitpython-dht
-board
-RPi.GPIO
+
+# Alternative libraries (backup options)
 Adafruit_DHT
+RPi.GPIO
+
+# System dependencies (install with apt-get)
+# sudo apt-get install libgpiod2
